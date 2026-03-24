@@ -1,5 +1,7 @@
 // 引入three.js核心库
 import * as THREE from "three";
+// 引入轨道控制器
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 // 创建场景
 const scene = new THREE.Scene();
@@ -120,6 +122,11 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 document.body.appendChild(renderer.domElement);
 
+// 创建轨道控制器
+const controls = new OrbitControls(camera, renderer.domElement);
+// 启用阻尼（惯性），使控制器更平滑
+controls.enableDamping = true;
+
 const clock = new THREE.Clock();
 function render() {
   const spt = clock.getDelta() * 1000;
@@ -129,6 +136,7 @@ function render() {
   lineLoop.rotateY(0.01);
   lineSegments.rotateY(0.01);
 
+  controls.update();
   renderer.render(scene, camera);
   requestAnimationFrame(render);
 }

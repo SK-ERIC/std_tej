@@ -1,5 +1,7 @@
 // 引入three.js核心库
 import * as THREE from "three";
+// 引入轨道控制器
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 // 创建场景
 const scene = new THREE.Scene();
@@ -81,7 +83,18 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 // 将渲染升成的 DOM 元素添加到文档的 body 中
 document.body.appendChild(renderer.domElement);
-renderer.render(scene, camera);
+
+// 创建轨道控制器
+const controls = new OrbitControls(camera, renderer.domElement);
+// 启用阻尼（惯性），使控制器更平滑
+controls.enableDamping = true;
+
+function render() {
+  controls.update();
+  renderer.render(scene, camera);
+  requestAnimationFrame(render);
+}
+render();
 
 // function render() {
 //   // 每次渲染时让点模型绕 Y 轴缓慢旋转，方便多角度观察
